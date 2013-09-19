@@ -1,0 +1,35 @@
+{
+  "name": "bloom",
+  "description": "Bloom Filter implemenation for Node.js applications.",
+  "version": "0.1",
+  "engines": {
+    "node": ">=0.6.13"
+  },
+  "author": {
+    "name": "Sean Byrnes",
+    "email": "sean@fogstack.com"
+  },
+  "keywords": [
+    "hash",
+    "indexing",
+    "bloom",
+    "filter"
+  ],
+  "homepage" : "https://github.com/sbyrnes/bloom.js",
+  "bugs" : { "url" : "https://github.com/sbyrnes/bloom.js/issues"},
+  "main": "./bloom.js",
+  "maintainers": [
+    {
+      "name": "Sean Byrnes",
+      "email": "sean@fogstack.com",
+      "url": "http://fogstack.com"
+    }
+  ],
+  "repository" :
+    { "type" : "git",
+      "url" : "https://github.com/sbyrnes/bloom.js"
+    },
+  "dependencies": {  },
+  "devDependencies": { "expresso" : ">=0.9.2" },
+  "optionalDependencies": {}
+}
