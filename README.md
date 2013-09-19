@@ -59,3 +59,5 @@ Obviously the byte array used to store the values needs to be sufficiently large
 
 You can read more about Bloom Filters here: http://en.wikipedia.org/wiki/Bloom_filter
 
+Bill Mill has a great description of bloom filters which helped in creating bloom.js: http://billmill.org/bloomfilter-tutorial/
+
