@@ -3,6 +3,14 @@ bloom.js
 
 A bloom filter implemented as a Node.js module.
 
+Description
+========
+A bloom filter is a probabilistic data structure used to test for membership in a set. It is a great way to track whether you have seen a given value previously or not. 
+
+For example, if you are implementing a web crawler you may want to be able to quickly identify whether you have seen a given page before or not. A bloom filter represents a low memory and fast way to do that detection, without needing to do a full search of your entire dataset.
+
+bloom.js provides a simple interface and implementation in pure javascript designed for Node.js applications. With little effort it could be modified to fit browser implementations as well.
+
 Installation
 ========
     npm install bloom.js
@@ -38,12 +46,6 @@ Or, if you're lazy you can save it to a file:
 And load from a file later:
 
     BloomFilter.loadDataFile('filename.data');
-
-What is a Bloom Filter
-========
-A bloom filter is a probabilistic data structure used to test for membership in a set. It is a great way to track whether you have seen a given value previously or not. 
-
-For example, if you are implementing a web crawler you may want to be able to quickly identify whether you have seen a given page before or not. A bloom filter represents a low memory and fast way to do that detection, without needing to do a full search of your entire dataset.
 
 How does it work?
 ========
