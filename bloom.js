@@ -12,7 +12,7 @@ var setData = new Uint8Array(100);
  */ 
 function add(value)
 {
-
+	
 }
 
 /**
@@ -41,7 +41,8 @@ function getData()
  */ 
 function loadData(data)
 {
-	return false;
+	// TODO: We should probably validate the data.
+	return setData = data;
 } 
 
 /**
@@ -62,8 +63,16 @@ function saveDataFile(filename)
  */ 
 function loadDataFile(data)
 {
+	
 	return false;
 } 
+
+/***** Hash Functions *********/
+// TODO: This is a placeholder hash function.
+function hash(value)
+{
+	return 0;
+}
 
 /***** Binary file reading and writing *********/
 /**
@@ -81,6 +90,16 @@ function saveToFile(filename, data) {
   fs.write(fd, buff, 0, buff.length, 0, function(err,written){
 		// ERROR HANDLING GOES HERE
   });
+}
+function readFromFile(filename) {
+
+  var fs = IMPORTS.require('fs');
+
+  var fd =  fs.openSync(filename, 'r');
+  
+  // TODO: Read the file in via Buffer
+  
+  return data;
 }
 
 
