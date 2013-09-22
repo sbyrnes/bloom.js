@@ -3,16 +3,20 @@
  * 
  * Javascript implementation of a Bloom Filter.. 
  */
+var MurmurHash = require('./murmurhash.js');
  
-var setData = new Uint8Array(100); 
+var numBuckets = 1000;
+var numHashes = 5; 
+ 
+var bitVector = new Uint8Array(numBuckets); 
  
 /**
  * Adds a value to the filter set.
  * @param value The value to add to the set.
  */ 
 function add(value)
-{
-	
+{	
+	hashify(String(value), function(index) { bitVector[index] = 1; });
 }
 
 /**
@@ -22,8 +26,36 @@ function add(value)
  */ 
 function isMember(value)
 {
-	return false;
+	var result = true;
+
+	hashify(String(value), function(index) { if(bitVector[index] != 1) result = false; });
+	
+	return result;
 }  
+
+/**
+ * Calculates hashes on the given value and involkes operator on each of the values.
+ * @param value The value to hashify.
+ * @param operator The function to call on all hash values individually.
+ */ 
+function hashify(value, operator)
+{
+	// We can calculate many hash values from only a few actual hashes, using the method 
+	// described here: http://www.eecs.harvard.edu/~kirsch/pubs/bbbf/esa06.pdf
+	var hash1 = MurmurHash.murmurhash3_32_gc(value, 0);
+	var hash2 = MurmurHash.murmurhash3_32_gc(value, hash1);
+	
+	console.log('['+value+'] ' + hash1 + ' | ' + hash2);
+	
+	// Generate indexes using the function: 
+	// h_i(x) = (h1(x) + i * h2(x)) mod numBuckets
+	for(i = 0; i < numHashes; i++)
+	{	
+		var index = Math.abs((hash1 + i * hash2) % numBuckets);
+		operator(index);
+		console.log(index);
+	}
+}
 
 /**
  * Returns the filter set data for persistence or sharing.
@@ -31,7 +63,7 @@ function isMember(value)
  */ 
 function getData()
 {
-	return setData;
+	return bitVector;
 }  
 
 /**
@@ -42,7 +74,7 @@ function getData()
 function loadData(data)
 {
 	// TODO: We should probably validate the data.
-	return setData = data;
+	return bitVector = data;
 } 
 
 /**
@@ -68,10 +100,9 @@ function loadDataFile(data)
 } 
 
 /***** Hash Functions *********/
-// TODO: This is a placeholder hash function.
-function hash(value)
-{
-	return 0;
+function hash(value, seed)
+{	
+	return MurmurHash.murmurhash3_32_gc(value, seed);
 }
 
 /***** Binary file reading and writing *********/

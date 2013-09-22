@@ -9,6 +9,8 @@ exports['test addElements#strings'] = function(beforeExit, assert){
 	
 	BloomFilter.add('test');
 	
+	console.log(BloomFilter.getData());
+	
     assert.equal(true, BloomFilter.isMember('hello'));
     assert.equal(true, BloomFilter.isMember('test'));
     assert.equal(false, BloomFilter.isMember('blah'));

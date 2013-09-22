@@ -1,7 +1,7 @@
 bloom.js
 ========
 
-A bloom filter implemented as a Node.js module.
+A bloom filter implemented as a Node.js module. 
 
 Description
 ========
@@ -10,6 +10,8 @@ A bloom filter is a probabilistic data structure used to test for membership in 
 For example, if you are implementing a web crawler you may want to be able to quickly identify whether you have seen a given page before or not. A bloom filter represents a low memory and fast way to do that detection, without needing to do a full search of your entire dataset.
 
 bloom.js provides a simple interface and implementation in pure javascript designed for Node.js applications. With little effort it could be modified to fit browser implementations as well.
+
+This implementation utilizes the Murmur Hash 3 implementation by Gary Court: http://github.com/garycourt/murmurhash-js and benefitted greatly from the Bloom Filter tutorial by Bill Mill: http://billmill.org/bloomfilter-tutorial/
 
 Installation
 ========
