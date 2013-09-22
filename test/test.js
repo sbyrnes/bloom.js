@@ -9,11 +9,9 @@ exports['test addElements#strings'] = function(beforeExit, assert){
 	
 	BloomFilter.add('test');
 	
-	console.log(BloomFilter.getData());
-	
-    assert.equal(true, BloomFilter.isMember('hello'));
-    assert.equal(true, BloomFilter.isMember('test'));
-    assert.equal(false, BloomFilter.isMember('blah'));
+    assert.equal(true, BloomFilter.contains('hello'));
+    assert.equal(true, BloomFilter.contains('test'));
+    assert.equal(false, BloomFilter.contains('blah'));
 };
 
 exports['test addElements#numbers'] = function(beforeExit, assert){
@@ -21,8 +19,32 @@ exports['test addElements#numbers'] = function(beforeExit, assert){
 	
 	BloomFilter.add(987453);
 	
-    assert.equal(true, BloomFilter.isMember(12345));
-    assert.equal(true, BloomFilter.isMember(987453));
-    assert.equal(false, BloomFilter.isMember(84422));
+    assert.equal(true, BloomFilter.contains(12345));
+    assert.equal(true, BloomFilter.contains(987453));
+    assert.equal(false, BloomFilter.contains(84422));
+};
+
+exports['test getAndLoadData#numbers'] = function(beforeExit, assert){
+	BloomFilter.add(12345);
+	BloomFilter.add(987453);
+	
+	var data = BloomFilter.getData();
+	BloomFilter.loadData(data);
+	
+    assert.equal(true, BloomFilter.contains(12345));
+    assert.equal(true, BloomFilter.contains(987453));
+    assert.equal(false, BloomFilter.contains(84422));
+};
+
+exports['test saveAndLoadData#numbers'] = function(beforeExit, assert){
+	BloomFilter.add(12345);
+	BloomFilter.add(987453);
+	
+	var data = BloomFilter.getData();
+	BloomFilter.loadData(data);
+	
+    assert.equal(true, BloomFilter.contains(12345));
+    assert.equal(true, BloomFilter.contains(987453));
+    assert.equal(false, BloomFilter.contains(84422));
 };
 

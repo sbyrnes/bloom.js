@@ -24,7 +24,7 @@ function add(value)
  * @param value The value to test for.
  * @return False if not in the set. True if likely to be in the set.
  */ 
-function isMember(value)
+function contains(value)
 {
 	var result = true;
 
@@ -45,15 +45,12 @@ function hashify(value, operator)
 	var hash1 = MurmurHash.murmurhash3_32_gc(value, 0);
 	var hash2 = MurmurHash.murmurhash3_32_gc(value, hash1);
 	
-	console.log('['+value+'] ' + hash1 + ' | ' + hash2);
-	
 	// Generate indexes using the function: 
 	// h_i(x) = (h1(x) + i * h2(x)) mod numBuckets
 	for(i = 0; i < numHashes; i++)
 	{	
 		var index = Math.abs((hash1 + i * hash2) % numBuckets);
 		operator(index);
-		console.log(index);
 	}
 }
 
@@ -100,6 +97,7 @@ function loadDataFile(data)
 } 
 
 /***** Hash Functions *********/
+// Abstraction wrapper function to make it easier to swap in hash functions later.
 function hash(value, seed)
 {	
 	return MurmurHash.murmurhash3_32_gc(value, seed);
@@ -136,7 +134,7 @@ function readFromFile(filename) {
 
  
 module.exports.add = add;
-module.exports.isMember = isMember;
+module.exports.contains = contains;
 module.exports.getData = getData;
 module.exports.loadData = loadData;
 module.exports.saveDataFile = saveDataFile;

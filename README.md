@@ -27,7 +27,7 @@ Add a value to the filter:
     
 Check set membership:
 
-    BloomFilter.isMember(value);
+    BloomFilter.contains(value);
     
 That's all you need for basic usage.
 
@@ -60,6 +60,3 @@ When you want to see if an entry is a member of the set, you simply apply the sa
 Obviously the byte array used to store the values needs to be sufficiently large that adding the number of values you want to add does not set all the values to 1. This is a tuning aspect of the algorithm.
 
 You can read more about Bloom Filters here: http://en.wikipedia.org/wiki/Bloom_filter
-
-Bill Mill has a great description of bloom filters which helped in creating bloom.js: http://billmill.org/bloomfilter-tutorial/
-
