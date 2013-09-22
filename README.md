@@ -35,19 +35,11 @@ Advanced Usage
 ========
 If you'd like to use a BloomFilter between sessions or restarts, you can serialize the filter and restore it later. This is accomplished through some convenience methods:
 
-    var bytes = BloomFilter.getDate();
+    var data = BloomFilter.getDate();
     
 And load it later:
 
-    BloomFilter.loadData(bytes);
-    
-Or, if you're lazy you can save it to a file:
-
-    BloomFilter.saveDataFile('filename.data');
-    
-And load from a file later:
-
-    BloomFilter.loadDataFile('filename.data');
+    BloomFilter.loadData(data);
 
 How does it work?
 ========

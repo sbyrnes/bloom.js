@@ -75,64 +75,14 @@ function loadData(data)
 	return bitVector = data;
 } 
 
-/**
- * Saves the filter set data to the specified file.
- * @param filename The fully qualified path to the file where the data should be saved.
- * @return True if successful, false otherwise.
- */ 
-function saveDataFile(filename)
-{
-	saveToFile(filename, getData());
-	return false;
-}  
-
-/**
- * Loads the filter set data from the specified file.
- * @param filename The fully qualified path to the file where the data should be loaded.
- * @return True if successful, false otherwise.
- */ 
-function loadDataFile(data)
-{
-	
-	return false;
-} 
-
 /***** Hash Functions *********/
 // Abstraction wrapper function to make it easier to swap in hash functions later.
 function hash(value, seed)
 {	
 	return MurmurHash.murmurhash3_32_gc(value, seed);
 }
-
-/***** File IO **********/
-function saveToFile(filename, data) {
-
-  	var fs = IMPORTS.require('fs');
-	fs.writeFile(filename, data, function(err) {
-		if(err) {
-			console.log(err);
-		} else {
-			console.log("The file was saved!");
-		}
-	}); 
-}
-function readFromFile(filename) {
-
-  	var fs = IMPORTS.require('fs');
-	fs = require('fs')
-	fs.readFile('/etc/hosts', 'utf8', function (err,data) {
-	  if (err) {
-		return console.log(err);
-	  }
-	  console.log(data);
-	});
-}
-
-
  
 module.exports.add = add;
 module.exports.contains = contains;
 module.exports.getData = getData;
 module.exports.loadData = loadData;
-module.exports.saveDataFile = saveDataFile;
-module.exports.loadDataFile = loadDataFile;

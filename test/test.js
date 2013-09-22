@@ -36,7 +36,3 @@ exports['test getAndLoadData#numbers'] = function(beforeExit, assert){
     assert.equal(false, BloomFilter.contains(84422));
 };
 
-exports['test saveAndLoadData#numbers'] = function(beforeExit, assert){
-	assert.equal(true, false);
-};
-
