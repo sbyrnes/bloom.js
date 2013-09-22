@@ -15,7 +15,7 @@ This implementation utilizes the Murmur Hash 3 implementation by Gary Court: htt
 
 Installation
 ========
-    npm install bloom.js
+    npm install bloom
     
 Usage
 ========
