@@ -5,9 +5,9 @@ A bloom filter implemented as a Node.js module.
 
 Description
 ========
-A bloom filter is a probabilistic data structure used to test for membership in a set. It is a great way to track whether you have seen a given value previously or not. 
+A bloom filter is a probabilistic data structure used to test for membership in a set. It is highly memory efficient and very fast, so it is a good tool when faced with a very large number of values in a set and testing set membership is performance sensitive.  
 
-For example, if you are implementing a web crawler you may want to be able to quickly identify whether you have seen a given page before or not. A bloom filter represents a low memory and fast way to do that detection, without needing to do a full search of your entire dataset.
+For example, if you are implementing a web crawler you may want to be able to quickly identify whether you have seen a given page before or not. Instead of looking up the page in your data store, you can register each page's text as a value in the bloom filter and quickly check. Since the bloom filter is memory efficient you can easily handle many thousands of web pages with very little space. 
 
 bloom.js provides a simple interface and implementation in pure javascript designed for Node.js applications. With little effort it could be modified to fit browser implementations as well.
 
@@ -20,32 +20,43 @@ Installation
 Usage
 ========
     var BloomFilter = require('bloom.js');
+    
+    var filter = new BloomFilter();
 
 Add a value to the filter:
 
-    BloomFilter.add(value); 
+    filter.add(value); 
     
 Check set membership:
 
-    BloomFilter.contains(value);
+    filter.contains(value);
     
 That's all you need for basic usage.
 
 Advanced Usage
 ========
+The performance of a bloom filter is directly related to three factors: 
+ * The number of values in the filter set
+ * The number of hashes to apply to values
+ * The number of buckets in the bit vector
+ 
+The number of values in the filter set are determined by your use case, so it is common to tune the other two based on your needs. To do that you can optionally provide them to the constructor:
+
+	var filter = new BloomFilter(number_of_buckets, number_of_hashes);
+  
 If you'd like to use a BloomFilter between sessions or restarts, you can serialize the filter and restore it later. This is accomplished through some convenience methods:
 
-    var data = BloomFilter.getDate();
+    var data = filter.getDate();
     
 And load it later:
 
-    BloomFilter.loadData(data);
+    filter.loadData(data);
 
 How does it work?
 ========
-Bloom filters work by taking a given input and hashing it many times. Every hash results in a value which maps to an entry in a byte array. Ideally, if you have enough hash functions that are sufficiently independent, the resulting sequence of hash values (the "signature" of the value) should be unique. 
+Bloom filters work by taking a given input and hashing it many times. Every hash results in a value which maps to an entry in a bit vector. Ideally, if you have enough hash functions that are sufficiently independent, the resulting sequence of hash values (the "signature" of the value) will be unique. 
 
-When a new entry is added, all of these hashes are run on the input and the value of the entry in the byte array corresponding to the value is set to 1. Note that this means a single entry may touch dozens of entries in the byte array. While many different inputs may attempt to set the same entry to 1, it will only be set once. 
+To start, the bit vector is initialized to all zeroes. When a new entry is added, all of the hash functions are run on the input and the value of the entry in the byte array corresponding to each hash value is set to 1. Note that this means a single entry may touch dozens of entries in the byte array (if there are dozens of hash functions). While many different inputs may attempt to set the same entry to 1, it will only be set once. 
 
 When you want to see if an entry is a member of the set, you simply apply the same hash functions and see if all the corresponding entries are 1. If no then you have not seen the entry before. If yes, you MIGHT have seen it before but you can't be sure (It is possible that a random array of other entries happen to set all those values to 1). However, with proper implementation the chances of a false positive are very low (less than 1%). 
 

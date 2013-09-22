@@ -5,34 +5,39 @@ var BloomFilter = require('../bloom.js');
 
 // Test adding elements to the set
 exports['test addElements#strings'] = function(beforeExit, assert){
-	BloomFilter.add('hello');
+	var filter = new BloomFilter();
+	filter.add('hello');
 	
-	BloomFilter.add('test');
+	filter.add('test');
 	
-    assert.equal(true, BloomFilter.contains('hello'));
-    assert.equal(true, BloomFilter.contains('test'));
-    assert.equal(false, BloomFilter.contains('blah'));
+    assert.equal(true, filter.contains('hello'));
+    assert.equal(true, filter.contains('test'));
+    assert.equal(false, filter.contains('blah'));
 };
 
 exports['test addElements#numbers'] = function(beforeExit, assert){
-	BloomFilter.add(12345);
+	var filter = new BloomFilter();
+	filter.add(12345);
 	
-	BloomFilter.add(987453);
+	filter.add(987453);
 	
-    assert.equal(true, BloomFilter.contains(12345));
-    assert.equal(true, BloomFilter.contains(987453));
-    assert.equal(false, BloomFilter.contains(84422));
+    assert.equal(true, filter.contains(12345));
+    assert.equal(true, filter.contains(987453));
+    assert.equal(false, filter.contains(84422));
 };
 
 exports['test getAndLoadData#numbers'] = function(beforeExit, assert){
-	BloomFilter.add(12345);
-	BloomFilter.add(987453);
+	var filter = new BloomFilter();
+	filter.add(12345);
+	filter.add(987453);
 	
-	var data = BloomFilter.getData();
-	BloomFilter.loadData(data);
+	var data = filter.getData();
 	
-    assert.equal(true, BloomFilter.contains(12345));
-    assert.equal(true, BloomFilter.contains(987453));
-    assert.equal(false, BloomFilter.contains(84422));
+	var newFilter = new BloomFilter();
+	newFilter.loadData(data);
+	
+    assert.equal(true, newFilter.contains(12345));
+    assert.equal(true, newFilter.contains(987453));
+    assert.equal(false, newFilter.contains(84422));
 };
 
