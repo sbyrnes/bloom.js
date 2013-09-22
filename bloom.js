@@ -4,11 +4,12 @@
  * Javascript implementation of a Bloom Filter.. 
  */
 var MurmurHash = require('./murmurhash.js');
+var BitArray = require('bit-array');
  
 var numBuckets = 1000;
 var numHashes = 5; 
  
-var bitVector = new Uint8Array(numBuckets); 
+var bitVector = new BitArray(numBuckets); 
  
 /**
  * Adds a value to the filter set.
@@ -16,7 +17,7 @@ var bitVector = new Uint8Array(numBuckets);
  */ 
 function add(value)
 {	
-	hashify(String(value), function(index) { bitVector[index] = 1; });
+	hashify(String(value), function(index) { bitVector.set(index, true); });
 }
 
 /**
@@ -28,7 +29,7 @@ function contains(value)
 {
 	var result = true;
 
-	hashify(String(value), function(index) { if(bitVector[index] != 1) result = false; });
+	hashify(String(value), function(index) { if(!bitVector.get(index)) result = false; });
 	
 	return result;
 }  
@@ -46,7 +47,7 @@ function hashify(value, operator)
 	var hash2 = MurmurHash.murmurhash3_32_gc(value, hash1);
 	
 	// Generate indexes using the function: 
-	// h_i(x) = (h1(x) + i * h2(x)) mod numBuckets
+	// h_i(x) = (h1(x) + i * h2(x)) % numBuckets
 	for(i = 0; i < numHashes; i++)
 	{	
 		var index = Math.abs((hash1 + i * hash2) % numBuckets);
@@ -103,32 +104,28 @@ function hash(value, seed)
 	return MurmurHash.murmurhash3_32_gc(value, seed);
 }
 
-/***** Binary file reading and writing *********/
-/**
- * Thanks to the top answer on StackOverflow found here:
- * http://stackoverflow.com/questions/7329128/how-to-write-binary-data-to-a-file-using-node-js
- */
+/***** File IO **********/
 function saveToFile(filename, data) {
 
-  var fs = IMPORTS.require('fs');
-
-  var fd =  fs.openSync(filename, 'w');
-
-  var buff = new Buffer(data, 'base64');
-
-  fs.write(fd, buff, 0, buff.length, 0, function(err,written){
-		// ERROR HANDLING GOES HERE
-  });
+  	var fs = IMPORTS.require('fs');
+	fs.writeFile(filename, data, function(err) {
+		if(err) {
+			console.log(err);
+		} else {
+			console.log("The file was saved!");
+		}
+	}); 
 }
 function readFromFile(filename) {
 
-  var fs = IMPORTS.require('fs');
-
-  var fd =  fs.openSync(filename, 'r');
-  
-  // TODO: Read the file in via Buffer
-  
-  return data;
+  	var fs = IMPORTS.require('fs');
+	fs = require('fs')
+	fs.readFile('/etc/hosts', 'utf8', function (err,data) {
+	  if (err) {
+		return console.log(err);
+	  }
+	  console.log(data);
+	});
 }
 
 
