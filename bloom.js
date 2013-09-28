@@ -95,3 +95,23 @@ function hash(value, seed)
 }
  
 module.exports = BloomFilter;
+
+/**
+ * Estimate the false positive rate for a given set of usage parameters
+ * @param numValues The number of unique values in the set to be added to the filter.
+ * @param numBuckets The number of unique buckets (bits) in the filter
+ * @param numHashes The number of hashes to use.
+ * @return Estimated false positive percentage as a float.
+ */ 
+function estimateFalsePositiveRate(numValues, numBuckets, numHashes)
+{
+	// Formula for false positives is (1-e^(-kn/m))^k
+	// k - number of hashes
+	// n - number of set entries
+	// m - number of buckets
+	var expectedFalsePositivesRate = Math.pow((1 - Math.exp(-numHashes * numValues / numBuckets)), numHashes);
+	
+	return expectedFalsePositivesRate;
+}
+
+module.exports.estimateFalsePositiveRate = estimateFalsePositiveRate;
