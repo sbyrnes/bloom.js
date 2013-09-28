@@ -46,6 +46,12 @@ The number of values in the filter set are determined by your use case, so it is
 
 	var filter = new BloomFilter(number_of_buckets, number_of_hashes);
   
+To help you determine the correct number of buckets and hashes to use on your input set, there is a convenience static function that estimates the rate of false positives given a set of usage parameters. 
+
+	var expectedFalsePositivesRate = BloomFilter.estimateFalsePositiveRate(number_of_values, number_of_buckets, number_of_hashes);  
+  
+The expected false positive rate for a well tuned bloom filter should be around 1%.   
+  
 If you'd like to use a BloomFilter between sessions or restarts, you can serialize the filter and restore it later. This is accomplished through some convenience methods:
 
     var data = filter.getData();
