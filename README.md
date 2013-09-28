@@ -9,13 +9,15 @@ A bloom filter is a probabilistic data structure used to test for membership in 
 
 For example, if you are implementing a web crawler you may want to be able to quickly identify whether you have seen a given page before or not. Instead of looking up the page in your data store, you can register each page's text as a value in the bloom filter and quickly check. Since the bloom filter is memory efficient you can easily handle many thousands of web pages with very little space. 
 
+Note that you cannot remove a value from a bloom filter after it is added. Read "How it works" below for an explanation.
+
 bloom.js provides a simple interface and implementation in pure javascript designed for Node.js applications. With little effort it could be modified to fit browser implementations as well.
 
 This implementation utilizes the Murmur Hash 3 implementation by Gary Court: http://github.com/garycourt/murmurhash-js and benefitted greatly from the Bloom Filter tutorial by Bill Mill: http://billmill.org/bloomfilter-tutorial/
 
 Installation
 ========
-    npm install bloom
+    npm install bloom.js
     
 Usage
 ========
@@ -46,7 +48,7 @@ The number of values in the filter set are determined by your use case, so it is
   
 If you'd like to use a BloomFilter between sessions or restarts, you can serialize the filter and restore it later. This is accomplished through some convenience methods:
 
-    var data = filter.getDate();
+    var data = filter.getData();
     
 And load it later:
 
@@ -59,6 +61,8 @@ Bloom filters work by taking a given input and hashing it many times. Every hash
 To start, the bit vector is initialized to all zeroes. When a new entry is added, all of the hash functions are run on the input and the value of the entry in the byte array corresponding to each hash value is set to 1. Note that this means a single entry may touch dozens of entries in the byte array (if there are dozens of hash functions). While many different inputs may attempt to set the same entry to 1, it will only be set once. 
 
 When you want to see if an entry is a member of the set, you simply apply the same hash functions and see if all the corresponding entries are 1. If no then you have not seen the entry before. If yes, you MIGHT have seen it before but you can't be sure (It is possible that a random array of other entries happen to set all those values to 1). However, with proper implementation the chances of a false positive are very low (less than 1%). 
+
+Because of the fact that entries will map to some of the same entries, it is not possible to remove an entry from a bloom filter once it is added. There would be no way to untangle a single entry from all of the others, you would instead need to start a new filter.
 
 Obviously the byte array used to store the values needs to be sufficiently large that adding the number of values you want to add does not set all the values to 1. This is a tuning aspect of the algorithm.
 
