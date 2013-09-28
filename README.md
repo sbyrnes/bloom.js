@@ -21,16 +21,17 @@ Installation
     
 Usage
 ========
+<!-- language: lang-js -->
     var BloomFilter = require('bloom.js');
     
     var filter = new BloomFilter();
 
 Add a value to the filter:
-
+<!-- language: lang-js -->
     filter.add(value); 
     
 Check set membership:
-
+<!-- language: lang-js -->
     filter.contains(value);
     
 That's all you need for basic usage.
@@ -43,21 +44,21 @@ The performance of a bloom filter is directly related to three factors:
  * The number of buckets in the bit vector
  
 The number of values in the filter set are determined by your use case, so it is common to tune the other two based on your needs. To do that you can optionally provide them to the constructor:
-
+<!-- language: lang-js -->
 	var filter = new BloomFilter(number_of_buckets, number_of_hashes);
   
 To help you determine the correct number of buckets and hashes to use on your input set, there is a convenience static function that estimates the rate of false positives given a set of usage parameters. 
-
+<!-- language: lang-js -->
 	var expectedFalsePositivesRate = BloomFilter.estimateFalsePositiveRate(number_of_values, number_of_buckets, number_of_hashes);  
   
 The expected false positive rate for a well tuned bloom filter should be around 1%.   
   
 If you'd like to use a BloomFilter between sessions or restarts, you can serialize the filter and restore it later. This is accomplished through some convenience methods:
-
+<!-- language: lang-js -->
     var data = filter.getData();
     
 And load it later:
-
+<!-- language: lang-js -->
     filter.loadData(data);
 
 How does it work?
